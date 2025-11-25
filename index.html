@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Calculadora Escolar</title>
+<style>
+    body {
+        background: #000;
+        color: #fff;
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        height: 100vh;
+        padding-top: 40px;
+    }
+
+    .card {
+        background: #111;
+        padding: 25px;
+        width: 420px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px #fff3;
+    }
+
+    .card h2 {
+        margin-top: 0;
+        text-align: center;
+    }
+
+    .input-group {
+        margin-bottom: 12px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 4px;
+    }
+
+    input {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #444;
+        border-radius: 5px;
+        background: #222;
+        color: #fff;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        margin-top: 10px;
+        background: #fff;
+        color: #000;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+        border-radius: 5px;
+        transition: 0.2s;
+    }
+
+    button:hover {
+        background: #ccc;
+    }
+
+
+    #resultados {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.5s ease;
+        margin-top: 25px;
+        padding: 20px;
+        border: 1px solid #fff2;
+        border-radius: 8px;
+        background: #111;
+    }
+
+    #resultados.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+</style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Calculadora Escolar</h2>
+
+    <div class="input-group">
+        <label>Alunos</label>
+        <input id="aluno" type="number" value="250">
+    </div>
+
+    <div class="input-group">
+        <label>Valor por aluno</label>
+        <input id="valor_aluno" type="number" step="0.01" value="25.50">
+    </div>
+
+    <div class="input-group">
+        <label>Custeio (%)</label>
+        <input id="custeio" type="number" value="40">
+    </div>
+
+    <div class="input-group">
+        <label>Capital (%)</label>
+        <input id="capital" type="number" value="60">
+    </div>
+
+    <div class="input-group">
+        <label>Pré-escola</label>
+        <input id="pre_escola" type="number" value="150">
+    </div>
+
+    <div class="input-group">
+        <label>Creche</label>
+        <input id="creche" type="number" value="100">
+    </div>
+
+    <div class="input-group">
+        <label>Fundamental</label>
+        <input id="fundamental" type="number" value="0">
+    </div>
+
+    <div class="input-group">
+        <label>EJA</label>
+        <input id="eja" type="number" value="0">
+    </div>
+
+    <div class="input-group">
+        <label>Técnico</label>
+        <input id="tecnico" type="number" value="0">
+    </div>
+
+    <button onclick="calcular()">Calcular</button>
+
+    <div id="resultados"></div>
+</div>
+
+<script>
+function calcular() {
+    let aluno = Number(document.getElementById("aluno").value);
+    let valor_aluno = Number(document.getElementById("valor_aluno").value);
+
+    let custeo_porcentagem = Number(document.getElementById("custeio").value) / 100;
+    let capital_porcentagem = Number(document.getElementById("capital").value) / 100;
+
+    let pre_escola = Number(document.getElementById("pre_escola").value);
+    let creche = Number(document.getElementById("creche").value);
+    let fundamental = Number(document.getElementById("fundamental").value);
+    let eja = Number(document.getElementById("eja").value);
+    let tecnico = Number(document.getElementById("tecnico").value);
+
+    let soma_modalidades = pre_escola + creche + fundamental + eja + tecnico;
+
+
+    if (soma_modalidades > aluno) {
+        mostrarResultados("<b>Erro:</b> soma das modalidades maior que o total de alunos!");
+        return;
+    }
+
+    let valor_porcentagem_creche = creche / aluno;
+    let valor_porcentagem_pre_escola = pre_escola / aluno;
+    let valor_porcentagem_fundamental = fundamental / aluno;
+    let valor_porcentagem_eja = eja / aluno;
+    let valor_porcentagem_tecnico = tecnico / aluno;
+
+    let valor_total_escola = aluno * valor_aluno;
+
+    let valor_escola_recebe_creche = valor_total_escola * valor_porcentagem_creche;
+    let valor_escola_recebe_pre_escola = valor_total_escola * valor_porcentagem_pre_escola;
+    let valor_escola_recebe_fundamental = valor_total_escola * valor_porcentagem_fundamental;
+    let valor_escola_recebe_eja = valor_total_escola * valor_porcentagem_eja;
+    let valor_escola_recebe_tecnico = valor_total_escola * valor_porcentagem_tecnico;
+
+    let html = `
+        <h3>Resultados:</h3>
+        Valor total da escola: R$ ${valor_total_escola.toFixed(2)}<br><br>
+        Creche: R$ ${valor_escola_recebe_creche.toFixed(2)}<br>
+        Pré-escola: R$ ${valor_escola_recebe_pre_escola.toFixed(2)}<br>
+        Fundamental: R$ ${valor_escola_recebe_fundamental.toFixed(2)}<br>
+        EJA: R$ ${valor_escola_recebe_eja.toFixed(2)}<br>
+        Técnico: R$ ${valor_escola_recebe_tecnico.toFixed(2)}<br>
+    `;
+
+    mostrarResultados(html);
+}
+
+function mostrarResultados(html) {
+    let div = document.getElementById("resultados");
+    div.innerHTML = html;
+
+
+    div.classList.remove("visible");
+    setTimeout(() => {
+        div.classList.add("visible");
+    }, 50);
+}
+</script>
+
+</body>
+</html>

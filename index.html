@@ -84,36 +84,16 @@
 <body>
 
 <div class="card">
-    <h2>Calculadora Escolar</h2>
-
-    <div class="input-group">
-        <label>Alunos</label>
-        <input id="aluno" type="number" value="250">
-    </div>
-
-    <div class="input-group">
-        <label>Valor por aluno</label>
-        <input id="valor_aluno" type="number" step="0.01" value="25.50">
-    </div>
-
-    <div class="input-group">
-        <label>Custeio (%)</label>
-        <input id="custeio" type="number" value="40">
-    </div>
-
-    <div class="input-group">
-        <label>Capital (%)</label>
-        <input id="capital" type="number" value="60">
-    </div>
-
-    <div class="input-group">
-        <label>Pré-escola</label>
-        <input id="pre_escola" type="number" value="150">
-    </div>
-
+    <h2>Calculadora de Repasse</h2>
+    
     <div class="input-group">
         <label>Creche</label>
         <input id="creche" type="number" value="100">
+    </div>
+    
+    <div class="input-group">
+        <label>Pré-escola</label>
+        <input id="pre_escola" type="number" value="150">
     </div>
 
     <div class="input-group">
@@ -130,41 +110,56 @@
         <label>Técnico</label>
         <input id="tecnico" type="number" value="0">
     </div>
+        
+    <div class="input-group">
+        <label>Custeio (%)</label>
+        <input id="custeio" type="number" value="40">
+    </div>
 
+    <div class="input-group">
+        <label>Capital (%)</label>
+        <input id="capital" type="number" value="60">
+    </div>
+    
+    <div class="input-group">
+        <label>Valor por aluno</label>
+        <input id="valor_aluno" type="number" step="0.01" value="25.50">
+    </div>
+    
     <button onclick="calcular()">Calcular</button>
 
     <div id="resultados"></div>
 </div>
 
 <script>
-function calcular() {
-    let aluno = Number(document.getElementById("aluno").value);
-    let valor_aluno = Number(document.getElementById("valor_aluno").value);
-
-    let custeo_porcentagem = Number(document.getElementById("custeio").value) / 100;
-    let capital_porcentagem = Number(document.getElementById("capital").value) / 100;
-
-    let pre_escola = Number(document.getElementById("pre_escola").value);
+function calcular() {        
+    
     let creche = Number(document.getElementById("creche").value);
+    let pre_escola = Number(document.getElementById("pre_escola").value);
     let fundamental = Number(document.getElementById("fundamental").value);
     let eja = Number(document.getElementById("eja").value);
     let tecnico = Number(document.getElementById("tecnico").value);
+    
+    let perc_custeio = Number(document.getElementById("custeio").value) / 100;
+    let perc_capital = Number(document.getElementById("capital").value) / 100;
+    
+    let valor_aluno = Number(document.getElementById("valor_aluno").value);
 
-    let soma_modalidades = pre_escola + creche + fundamental + eja + tecnico;
+    let total_alunos = creche + pre_escola + fundamental + eja + tecnico;
 
 
-    if (soma_modalidades > aluno) {
-        mostrarResultados("<b>Erro:</b> soma das modalidades maior que o total de alunos!");
+    if (total_alunos === 0) {
+        mostrarResultados("<b>Erro:</b> O total de alunos não pode ser zero.");
         return;
     }
 
-    let valor_porcentagem_creche = creche / aluno;
-    let valor_porcentagem_pre_escola = pre_escola / aluno;
-    let valor_porcentagem_fundamental = fundamental / aluno;
-    let valor_porcentagem_eja = eja / aluno;
-    let valor_porcentagem_tecnico = tecnico / aluno;
+    let valor_porcentagem_creche = creche / total_alunos;
+    let valor_porcentagem_pre_escola = pre_escola /  total_alunos;
+    let valor_porcentagem_fundamental = fundamental /  total_alunos;
+    let valor_porcentagem_eja = eja /  total_alunos;
+    let valor_porcentagem_tecnico = tecnico /  total_alunos;
 
-    let valor_total_escola = aluno * valor_aluno;
+    let valor_total_escola =  total_alunos * valor_aluno;
 
     let valor_escola_recebe_creche = valor_total_escola * valor_porcentagem_creche;
     let valor_escola_recebe_pre_escola = valor_total_escola * valor_porcentagem_pre_escola;
@@ -174,11 +169,12 @@ function calcular() {
 
     let html = `
         <h3>Resultados:</h3>
-        Valor total da escola: R$ ${valor_total_escola.toFixed(2)}<br><br>
-        Creche: R$ ${valor_escola_recebe_creche.toFixed(2)}<br>
-        Pré-escola: R$ ${valor_escola_recebe_pre_escola.toFixed(2)}<br>
-        Fundamental: R$ ${valor_escola_recebe_fundamental.toFixed(2)}<br>
-        EJA: R$ ${valor_escola_recebe_eja.toFixed(2)}<br>
+        Total de alunos: ${total_alunos} <br><br><br>
+        Valor devido: R$ ${valor_total_escola.toFixed(2)}<br><br><br>
+        Creche: R$ ${valor_escola_recebe_creche.toFixed(2)}<br><br>
+        Pré-escola: R$ ${valor_escola_recebe_pre_escola.toFixed(2)}<br><br>
+        Fundamental: R$ ${valor_escola_recebe_fundamental.toFixed(2)}<br><br>
+        EJA: R$ ${valor_escola_recebe_eja.toFixed(2)}<br><br>
         Técnico: R$ ${valor_escola_recebe_tecnico.toFixed(2)}<br>
     `;
 

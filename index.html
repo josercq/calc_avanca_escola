@@ -206,10 +206,12 @@
       opacity:0;
       transform:translateY(10px);
       transition:all .35s ease, background .25s ease, border-color .25s ease;
+      display:none; /* começa escondido */
     }
     #resultados.visible{
       opacity:1;
       transform:translateY(0);
+      display:block;
     }
 
     h3{ margin:0 0 8px; font-size:16px; }
@@ -288,8 +290,8 @@
 
     <div class="input-group">
       <label>Valor por aluno Integral (R$)</label>
-      <input id="valor_integral" type="number" step="0.01" min="0" value="250.06">
-      <div class="muted">Padrão: R$ 250,06</div>
+      <input id="valor_integral" type="number" step="0.01" min="0" value="250.06" readonly>
+      <div class="muted">Integral = Parcial x 2</div>
     </div>
 
     <div class="actions">
@@ -331,6 +333,19 @@
     });
     function moeda(v){ return formatBRL.format(v); }
 
+    /* ======= Atualizar valor integral (parcial x 2) ======= */
+    function atualizarValorIntegral() {
+      const parcialInput = document.getElementById("valor_parcial");
+      const integralInput = document.getElementById("valor_integral");
+      const valor_parcial = Number(parcialInput.value) || 0;
+      integralInput.value = (valor_parcial * 2).toFixed(2);
+    }
+
+    // Atualiza ao digitar no parcial
+    document.getElementById("valor_parcial").addEventListener("input", atualizarValorIntegral);
+    // Garante coerência inicial
+    atualizarValorIntegral();
+
     /* ======= Parcelamento sem estourar total ======= */
     function splitParcela(valorTotal) {
       const base = valorTotal / 2;
@@ -353,7 +368,7 @@
       let perc_capital = Number(document.getElementById("capital").value);
 
       let valor_parcial  = Number(document.getElementById("valor_parcial").value);
-      let valor_integral = Number(document.getElementById("valor_integral").value);
+      let valor_integral = valor_parcial * 2; // sempre integral = parcial x 2
 
       const inputs = [creche_p, creche_i, pre_p, pre_i, fund_p, fund_i, eja, tecnico];
 
@@ -439,7 +454,14 @@
 
     function mostrarResultados(html) {
       let div = document.getElementById("resultados");
+      if (!html) {
+        div.innerHTML = "";
+        div.classList.remove("visible");
+        div.style.display = "none";
+        return;
+      }
       div.innerHTML = html;
+      div.style.display = "block";
       div.classList.remove("visible");
       setTimeout(() => div.classList.add("visible"), 50);
     }
@@ -451,7 +473,7 @@
       document.getElementById("custeio").value = 80;
       document.getElementById("capital").value = 20;
       document.getElementById("valor_parcial").value = 125.03;
-      document.getElementById("valor_integral").value = 250.06;
+      atualizarValorIntegral(); // integral volta a ser 2x parcial padrão
 
       mostrarResultados("");
     }

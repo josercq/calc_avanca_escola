@@ -2,461 +2,198 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>Calculadora Avança Escola</title>
+<title>Calculadora Escolar</title>
 <style>
-  /* ===== Reset / alinhamento ===== */
-  *, *::before, *::after { box-sizing: border-box; }
+    body {
+        background: #000;
+        color: #fff;
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        height: 100vh;
+        padding-top: 40px;
+    }
 
-  /* ===== Tema CLARO (institucional) ===== */
-  :root{
-    --bg: #f2f4f8;
-    --card: #ffffff;
-    --card-2: #e8f0ff;
-    --text: #111827;
-    --muted: #4b5563;
-    --border: #e5e7eb;
+    .card {
+        background: #111;
+        padding: 25px;
+        width: 420px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px #fff3;
+    }
 
-    --input-bg: #f9fafb;
-    --input-border: #d1d5db;
+    .card h2 {
+        margin-top: 0;
+        text-align: center;
+    }
 
-    --accent: #3b6fd8;        /* azul suave do botão */
-    --accent-hover: #2f5fc0;
-    --accent-soft: #e8f0ff;
+    .input-group {
+        margin-bottom: 12px;
+    }
 
-    --shadow: 0 8px 22px rgba(17, 24, 39, .08);
-    --radius: 12px;
-  }
+    label {
+        display: block;
+        margin-bottom: 4px;
+    }
 
-  /* ===== Tema ESCURO (o anterior, mantido) ===== */
-  body.dark{
-    --bg: #0f172a;
-    --card: #111827;
-    --card-2: #0b1220;
-    --text: #e5e7eb;
-    --muted: #9ca3af;
-    --border: #1f2937;
+    input {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #444;
+        border-radius: 5px;
+        background: #222;
+        color: #fff;
+    }
 
-    --input-bg: #0b1220;
-    --input-border: #263246;
+    button {
+        width: 100%;
+        padding: 12px;
+        margin-top: 10px;
+        background: #fff;
+        color: #000;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+        border-radius: 5px;
+        transition: 0.2s;
+    }
 
-    --accent: #22c1b0;        /* teal do dark anterior */
-    --accent-hover: #1aa596;
-    --accent-soft: #0b1220;
+    button:hover {
+        background: #ccc;
+    }
 
-    --shadow: 0 12px 30px rgba(0,0,0,.45);
-    --radius: 14px;
-  }
 
-  body{
-    margin:0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    display:flex;
-    justify-content:center;
-    align-items:flex-start;
-    min-height:100vh;
-    padding:36px 12px;
-    transition: background .25s ease, color .25s ease;
-  }
+    #resultados {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.5s ease;
+        margin-top: 25px;
+        padding: 20px;
+        border: 1px solid #fff2;
+        border-radius: 8px;
+        background: #111;
+    }
 
-  /* fundo dark anterior com gradiente leve */
-  body.dark{
-    background: radial-gradient(1200px circle at 10% -10%, #1b2a54 0%, var(--bg) 45%, #0b1020 100%);
-  }
-
-  .card{
-    width:440px;
-    max-width:100%;
-    background: var(--card);
-    border:1px solid var(--border);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    padding:22px;
-    transition: background .25s ease, border-color .25s ease, box-shadow .25s ease;
-  }
-
-  /* Header com toggle */
-  .header{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-    margin-bottom:6px;
-  }
-  .header h2{
-    margin:0;
-    font-size:20px;
-    font-weight:700;
-    letter-spacing:.2px;
-  }
-
-  .theme-toggle{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    padding:6px 10px;
-    border-radius:999px;
-    border:1px solid var(--border);
-    background: transparent;
-    color: var(--text);
-    cursor:pointer;
-    font-size:12px;
-    font-weight:700;
-    transition: background .2s ease, border-color .2s ease, transform .04s ease;
-    user-select:none;
-  }
-  .theme-toggle:hover{
-    background: color-mix(in srgb, var(--accent) 10%, transparent);
-    border-color: color-mix(in srgb, var(--accent) 50%, var(--border));
-  }
-  .theme-toggle:active{ transform: translateY(1px); }
-
-  .section-title{
-    margin:16px 0 8px;
-    padding-top:10px;
-    border-top:1px solid var(--border);
-    font-size:12px;
-    font-weight:700;
-    color: var(--muted);
-    text-transform:uppercase;
-    letter-spacing:.6px;
-  }
-
-  .input-group{ margin-bottom:12px; }
-
-  label{
-    display:block;
-    margin-bottom:6px;
-    font-size:13px;
-    color: var(--muted);
-  }
-
-  input{
-    width:100%;
-    padding:9px 10px;
-    border-radius:8px;
-    border:1px solid var(--input-border);
-    background: var(--input-bg);
-    color: var(--text);
-    outline:none;
-    transition:border-color .15s ease, box-shadow .15s ease, background .15s ease;
-  }
-
-  input:focus{
-    background: #fff;
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
-  }
-  body.dark input:focus{
-    background: var(--input-bg);
-  }
-
-  /* ===== Botões ===== */
-  .actions{
-    display:flex;
-    flex-direction:column;
-    gap:8px;
-    margin-top:6px;
-  }
-
-  button.calc{
-    width:100%;
-    margin-top:0;
-    padding:12px;
-    border:none;
-    border-radius:8px;
-    background: var(--accent);
-    color:#fff;
-    font-weight:bold;
-    cursor:pointer;
-    transition: background .15s ease, transform .04s ease, box-shadow .2s ease;
-    box-shadow: 0 8px 18px color-mix(in srgb, var(--accent) 25%, transparent);
-    letter-spacing:.2px;
-  }
-  button.calc:hover{ background: var(--accent-hover); }
-  button.calc:active{ transform: translateY(1px); }
-
-  button.secondary{
-    width:100%;
-    padding:11px;
-    border-radius:8px;
-    border:1px solid var(--border);
-    background: transparent;
-    color: var(--text);
-    font-weight:600;
-    cursor:pointer;
-    transition: background .15s ease, transform .04s ease, border-color .15s ease;
-  }
-  button.secondary:hover{
-    background: color-mix(in srgb, var(--accent) 8%, transparent);
-    border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
-  }
-  button.secondary:active{ transform: translateY(1px); }
-
-  #resultados{
-    margin-top:16px;
-    padding:14px;
-    border-radius:10px;
-    background: var(--card-2);
-    border:1px solid color-mix(in srgb, var(--border) 70%, transparent);
-    font-size:14px;
-    line-height:1.55;
-
-    opacity:0;
-    transform:translateY(10px);
-    transition:all .35s ease, background .25s ease, border-color .25s ease;
-  }
-  #resultados.visible{
-    opacity:1;
-    transform:translateY(0);
-  }
-
-  h3{ margin:0 0 8px; font-size:16px; }
-  b{ color: var(--text); }
-  .muted{ color: var(--muted); font-size:12px; }
+    #resultados.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
 </style>
 </head>
 <body>
 
 <div class="card">
-  <div class="header">
-    <h2>Calculadora de Repasse</h2>
-    <button id="toggleTema" class="theme-toggle" type="button" onclick="toggleTema()">
-      🌙 Escuro
-    </button>
-  </div>
+    <h2>Calculadora Escolar</h2>
 
-  <div class="section-title">Alunos por etapa e jornada</div>
+    <div class="input-group">
+        <label>Alunos</label>
+        <input id="aluno" type="number" value="250">
+    </div>
 
-  <div class="input-group">
-    <label>Creche – Parcial</label>
-    <input id="creche_p" type="number" min="0" value="0">
-  </div>
-  <div class="input-group">
-    <label>Creche – Integral</label>
-    <input id="creche_i" type="number" min="0" value="0">
-  </div>
+    <div class="input-group">
+        <label>Valor por aluno</label>
+        <input id="valor_aluno" type="number" step="0.01" value="25.50">
+    </div>
 
-  <div class="input-group">
-    <label>Pré-escola – Parcial</label>
-    <input id="pre_p" type="number" min="0" value="0">
-  </div>
-  <div class="input-group">
-    <label>Pré-escola – Integral</label>
-    <input id="pre_i" type="number" min="0" value="0">
-  </div>
+    <div class="input-group">
+        <label>Custeio (%)</label>
+        <input id="custeio" type="number" value="40">
+    </div>
 
-  <div class="input-group">
-    <label>Fundamental – Parcial</label>
-    <input id="fund_p" type="number" min="0" value="0">
-  </div>
-  <div class="input-group">
-    <label>Fundamental – Integral</label>
-    <input id="fund_i" type="number" min="0" value="0">
-  </div>
+    <div class="input-group">
+        <label>Capital (%)</label>
+        <input id="capital" type="number" value="60">
+    </div>
 
-  <div class="input-group">
-    <label>EJA (tratado como Parcial)</label>
-    <input id="eja" type="number" min="0" value="0">
-  </div>
+    <div class="input-group">
+        <label>Pré-escola</label>
+        <input id="pre_escola" type="number" value="150">
+    </div>
 
-  <div class="input-group">
-    <label>Técnico (tratado como Parcial)</label>
-    <input id="tecnico" type="number" min="0" value="0">
-  </div>
+    <div class="input-group">
+        <label>Creche</label>
+        <input id="creche" type="number" value="100">
+    </div>
 
-  <div class="section-title">Destinação do recurso</div>
+    <div class="input-group">
+        <label>Fundamental</label>
+        <input id="fundamental" type="number" value="0">
+    </div>
 
-  <div class="input-group">
-    <label>Custeio (%)</label>
-    <input id="custeio" type="number" min="0" max="100" value="80">
-  </div>
+    <div class="input-group">
+        <label>EJA</label>
+        <input id="eja" type="number" value="0">
+    </div>
 
-  <div class="input-group">
-    <label>Capital (%)</label>
-    <input id="capital" type="number" min="0" max="100" value="20">
-  </div>
+    <div class="input-group">
+        <label>Técnico</label>
+        <input id="tecnico" type="number" value="0">
+    </div>
 
-  <div class="section-title">Parâmetros</div>
+    <button onclick="calcular()">Calcular</button>
 
-  <div class="input-group">
-    <label>Valor por aluno Parcial (R$)</label>
-    <input id="valor_parcial" type="number" step="0.01" min="0" value="125.03">
-    <div class="muted">Padrão: R$ 125,03</div>
-  </div>
-
-  <div class="input-group">
-    <label>Valor por aluno Integral (R$)</label>
-    <input id="valor_integral" type="number" step="0.01" min="0" value="250.06">
-    <div class="muted">Padrão: R$ 250,06</div>
-  </div>
-
-  <div class="actions">
-    <button class="calc" onclick="calcular()">Calcular</button>
-    <button class="secondary" type="button" onclick="limparCampos()">Limpar</button>
-    <button class="secondary" type="button" onclick="imprimir()">Imprimir</button>
-  </div>
-
-  <div id="resultados"></div>
+    <div id="resultados"></div>
 </div>
 
 <script>
-/* ======= Tema: carregar preferência ======= */
-(function initTema(){
-  const salvo = localStorage.getItem("tema");
-  const preferDark = salvo === "dark";
-  if (preferDark) document.body.classList.add("dark");
-  atualizarLabelTema();
-})();
-
-function toggleTema(){
-  document.body.classList.toggle("dark");
-  localStorage.setItem("tema", document.body.classList.contains("dark") ? "dark" : "light");
-  atualizarLabelTema();
-}
-
-function atualizarLabelTema(){
-  const btn = document.getElementById("toggleTema");
-  const darkAtivo = document.body.classList.contains("dark");
-  btn.textContent = darkAtivo ? " ☀️ " : " 🌙 ";
-}
-
-/* ======= Formatação monetária pt-BR ======= */
-const formatBRL = new Intl.NumberFormat('pt-BR', {
-  style: 'currency',
-  currency: 'BRL',
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2
-});
-function moeda(v){ return formatBRL.format(v); }
-
-/* ======= Parcelamento sem estourar total ======= */
-function splitParcela(valorTotal) {
-  const base = valorTotal / 2;
-  const parcela1 = Math.round(base * 100) / 100;
-  const parcela2 = Math.round((valorTotal - parcela1) * 100) / 100;
-  return [parcela1, parcela2];
-}
-
 function calcular() {
-  let creche_p = Number(document.getElementById("creche_p").value);
-  let creche_i = Number(document.getElementById("creche_i").value);
-  let pre_p    = Number(document.getElementById("pre_p").value);
-  let pre_i    = Number(document.getElementById("pre_i").value);
-  let fund_p   = Number(document.getElementById("fund_p").value);
-  let fund_i   = Number(document.getElementById("fund_i").value);
-  let eja      = Number(document.getElementById("eja").value);
-  let tecnico  = Number(document.getElementById("tecnico").value);
+    let aluno = Number(document.getElementById("aluno").value);
+    let valor_aluno = Number(document.getElementById("valor_aluno").value);
 
-  let perc_custeio = Number(document.getElementById("custeio").value);
-  let perc_capital = Number(document.getElementById("capital").value);
+    let custeo_porcentagem = Number(document.getElementById("custeio").value) / 100;
+    let capital_porcentagem = Number(document.getElementById("capital").value) / 100;
 
-  let valor_parcial  = Number(document.getElementById("valor_parcial").value);
-  let valor_integral = Number(document.getElementById("valor_integral").value);
+    let pre_escola = Number(document.getElementById("pre_escola").value);
+    let creche = Number(document.getElementById("creche").value);
+    let fundamental = Number(document.getElementById("fundamental").value);
+    let eja = Number(document.getElementById("eja").value);
+    let tecnico = Number(document.getElementById("tecnico").value);
 
-  const inputs = [creche_p, creche_i, pre_p, pre_i, fund_p, fund_i, eja, tecnico];
-  if (inputs.some(v => v < 0)) {
-    mostrarResultados("<b>Erro:</b> Nenhum campo de alunos pode ser negativo.");
-    return;
-  }
-  if (valor_parcial < 0 || valor_integral < 0) {
-    mostrarResultados("<b>Erro:</b> Valores per capita não podem ser negativos.");
-    return;
-  }
-  if (perc_custeio < 0 || perc_capital < 0) {
-    mostrarResultados("<b>Erro:</b> Percentuais não podem ser negativos.");
-    return;
-  }
-  if (Math.round((perc_custeio + perc_capital) * 100) / 100 !== 100) {
-    mostrarResultados("<b>Erro:</b> Custeio + Capital deve somar 100%.");
-    return;
-  }
+    let soma_modalidades = pre_escola + creche + fundamental + eja + tecnico;
 
-  let total_parcial  = creche_p + pre_p + fund_p + eja + tecnico;
-  let total_integral = creche_i + pre_i + fund_i;
-  let total_alunos   = total_parcial + total_integral;
 
-  if (total_alunos === 0) {
-    mostrarResultados("<b>Erro:</b> O total de alunos não pode ser zero.");
-    return;
-  }
+    if (soma_modalidades > aluno) {
+        mostrarResultados("<b>Erro:</b> soma das modalidades maior que o total de alunos!");
+        return;
+    }
 
-  let vl_creche = (creche_p * valor_parcial) + (creche_i * valor_integral);
-  let vl_pre    = (pre_p    * valor_parcial) + (pre_i    * valor_integral);
-  let vl_fund   = (fund_p   * valor_parcial) + (fund_i   * valor_integral);
-  let vl_eja    = (eja      * valor_parcial);
-  let vl_tec    = (tecnico  * valor_parcial);
+    let valor_porcentagem_creche = creche / aluno;
+    let valor_porcentagem_pre_escola = pre_escola / aluno;
+    let valor_porcentagem_fundamental = fundamental / aluno;
+    let valor_porcentagem_eja = eja / aluno;
+    let valor_porcentagem_tecnico = tecnico / aluno;
 
-  let [creche_p1, creche_p2] = splitParcela(vl_creche);
-  let [pre_p1, pre_p2]       = splitParcela(vl_pre);
-  let [fund_p1, fund_p2]     = splitParcela(vl_fund);
-  let [eja_p1, eja_p2]       = splitParcela(vl_eja);
-  let [tec_p1, tec_p2]       = splitParcela(vl_tec);
+    let valor_total_escola = aluno * valor_aluno;
 
-  let valor_total_escola = vl_creche + vl_pre + vl_fund + vl_eja + vl_tec;
+    let valor_escola_recebe_creche = valor_total_escola * valor_porcentagem_creche;
+    let valor_escola_recebe_pre_escola = valor_total_escola * valor_porcentagem_pre_escola;
+    let valor_escola_recebe_fundamental = valor_total_escola * valor_porcentagem_fundamental;
+    let valor_escola_recebe_eja = valor_total_escola * valor_porcentagem_eja;
+    let valor_escola_recebe_tecnico = valor_total_escola * valor_porcentagem_tecnico;
 
-  let custeio_total = valor_total_escola * (perc_custeio/100);
-  let capital_total = valor_total_escola * (perc_capital/100);
+    let html = `
+        <h3>Resultado:</h3>
+        Valor total devido: R$ ${valor_total_escola.toFixed(2)}<br><br>
+        Creche: R$ ${valor_escola_recebe_creche.toFixed(2)}<br>
+        Pré-escola: R$ ${valor_escola_recebe_pre_escola.toFixed(2)}<br>
+        Fundamental: R$ ${valor_escola_recebe_fundamental.toFixed(2)}<br>
+        EJA: R$ ${valor_escola_recebe_eja.toFixed(2)}<br>
+        Técnico: R$ ${valor_escola_recebe_tecnico.toFixed(2)}<br>
+    `;
 
-  let [parcela1, parcela2] = splitParcela(valor_total_escola);
-
-  let html = `
-    <h3>Resultado</h3>
-
-    <b>Alunos</b><br>
-    Total parcial: ${total_parcial}<br>
-    Total integral: ${total_integral}<br>
-    <b>Total de alunos:</b> ${total_alunos}<br><br>
-
-    <b>Valores devidos por etapa</b><br>
-    Creche: ${moeda(vl_creche)}
-      <span class="muted">(P1: ${moeda(creche_p1)} | P2: ${moeda(creche_p2)})</span><br>
-    Pré-escola: ${moeda(vl_pre)}
-      <span class="muted">(P1: ${moeda(pre_p1)} | P2: ${moeda(pre_p2)})</span><br>
-    Fundamental: ${moeda(vl_fund)}
-      <span class="muted">(P1: ${moeda(fund_p1)} | P2: ${moeda(fund_p2)})</span><br>
-    EJA: ${moeda(vl_eja)}
-      <span class="muted">(P1: ${moeda(eja_p1)} | P2: ${moeda(eja_p2)})</span><br>
-    Técnico: ${moeda(vl_tec)}
-      <span class="muted">(P1: ${moeda(tec_p1)} | P2: ${moeda(tec_p2)})</span><br><br>
-
-    <b>Valor total devido:</b> ${moeda(valor_total_escola)}<br><br>
-
-    <b>Destinação</b><br>
-    Custeio (${perc_custeio}%): ${moeda(custeio_total)}<br>
-    Capital (${perc_capital}%): ${moeda(capital_total)}<br><br>
-
-    <b>Parcelamento</b><br>
-    Parcela 1: ${moeda(parcela1)}<br>
-    Parcela 2: ${moeda(parcela2)}<br>
-    <span class="muted">(Parcela 1 + Parcela 2 = ${moeda(parcela1+parcela2)})</span>
-  `;
-
-  mostrarResultados(html);
+    mostrarResultados(html);
 }
 
 function mostrarResultados(html) {
-  let div = document.getElementById("resultados");
-  div.innerHTML = html;
-  div.classList.remove("visible");
-  setTimeout(() => div.classList.add("visible"), 50);
-}
+    let div = document.getElementById("resultados");
+    div.innerHTML = html;
 
-function limparCampos(){
-  const ids = ["creche_p","creche_i","pre_p","pre_i","fund_p","fund_i","eja","tecnico"];
-  ids.forEach(id => document.getElementById(id).value = 0);
 
-  document.getElementById("custeio").value = 80;
-  document.getElementById("capital").value = 20;
-  document.getElementById("valor_parcial").value = 125.03;
-  document.getElementById("valor_integral").value = 250.06;
-
-  mostrarResultados("");
-}
-
-function imprimir(){
-  window.print();
+    div.classList.remove("visible");
+    setTimeout(() => {
+        div.classList.add("visible");
+    }, 50);
 }
 </script>
 

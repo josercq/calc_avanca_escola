@@ -152,9 +152,17 @@
     background: var(--input-bg);
   }
 
+  /* ===== Botões ===== */
+  .actions{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    margin-top:6px;
+  }
+
   button.calc{
     width:100%;
-    margin-top:6px;
+    margin-top:0;
     padding:12px;
     border:none;
     border-radius:8px;
@@ -168,6 +176,23 @@
   }
   button.calc:hover{ background: var(--accent-hover); }
   button.calc:active{ transform: translateY(1px); }
+
+  button.secondary{
+    width:100%;
+    padding:11px;
+    border-radius:8px;
+    border:1px solid var(--border);
+    background: transparent;
+    color: var(--text);
+    font-weight:600;
+    cursor:pointer;
+    transition: background .15s ease, transform .04s ease, border-color .15s ease;
+  }
+  button.secondary:hover{
+    background: color-mix(in srgb, var(--accent) 8%, transparent);
+    border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+  }
+  button.secondary:active{ transform: translateY(1px); }
 
   #resultados{
     margin-top:16px;
@@ -267,7 +292,11 @@
     <div class="muted">Padrão: R$ 250,06</div>
   </div>
 
-  <button class="calc" onclick="calcular()">Calcular</button>
+  <div class="actions">
+    <button class="calc" onclick="calcular()">Calcular</button>
+    <button class="secondary" type="button" onclick="limparCampos()">Limpar</button>
+    <button class="secondary" type="button" onclick="imprimir()">Imprimir</button>
+  </div>
 
   <div id="resultados"></div>
 </div>
@@ -290,7 +319,7 @@ function toggleTema(){
 function atualizarLabelTema(){
   const btn = document.getElementById("toggleTema");
   const darkAtivo = document.body.classList.contains("dark");
-  btn.textContent = darkAtivo ? "☀️ Claro" : "🌙 Escuro";
+  btn.textContent = darkAtivo ? " ☀️ " : " 🌙 ";
 }
 
 /* ======= Formatação monetária pt-BR ======= */
@@ -412,6 +441,22 @@ function mostrarResultados(html) {
   div.innerHTML = html;
   div.classList.remove("visible");
   setTimeout(() => div.classList.add("visible"), 50);
+}
+
+function limparCampos(){
+  const ids = ["creche_p","creche_i","pre_p","pre_i","fund_p","fund_i","eja","tecnico"];
+  ids.forEach(id => document.getElementById(id).value = 0);
+
+  document.getElementById("custeio").value = 80;
+  document.getElementById("capital").value = 20;
+  document.getElementById("valor_parcial").value = 125.03;
+  document.getElementById("valor_integral").value = 250.06;
+
+  mostrarResultados("");
+}
+
+function imprimir(){
+  window.print();
 }
 </script>
 

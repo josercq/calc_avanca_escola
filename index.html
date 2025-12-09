@@ -321,7 +321,7 @@
     function atualizarLabelTema(){
       const btn = document.getElementById("toggleTema");
       const darkAtivo = document.body.classList.contains("dark");
-      btn.textContent = darkAtivo ? " ☀️ " : " 🌙 ";
+      btn.textContent = darkAtivo ? "☀️ Claro" : "🌙 Escuro";
     }
 
     /* ======= Formatação monetária pt-BR ======= */
@@ -346,6 +346,32 @@
     // Garante coerência inicial
     atualizarValorIntegral();
 
+    /* ======= Percentuais custeio/capital sempre somando 100 ======= */
+    const custeioInput = document.getElementById("custeio");
+    const capitalInput = document.getElementById("capital");
+
+    function normalizarPercentual(input, fallback){
+      let valor = Number(input.value);
+      if (!Number.isFinite(valor)) valor = fallback;
+      valor = Math.min(100, Math.max(0, valor));
+      input.value = valor.toFixed(2);
+      return valor;
+    }
+
+    function sincronizarCapital(){
+      const custeio = normalizarPercentual(custeioInput, 80);
+      capitalInput.value = (100 - custeio).toFixed(2);
+    }
+
+    function sincronizarCusteio(){
+      const capital = normalizarPercentual(capitalInput, 20);
+      custeioInput.value = (100 - capital).toFixed(2);
+    }
+
+    custeioInput.addEventListener("input", sincronizarCapital);
+    capitalInput.addEventListener("input", sincronizarCusteio);
+    sincronizarCapital();
+
     /* ======= Parcelamento sem estourar total ======= */
     function splitParcela(valorTotal) {
       const base = valorTotal / 2;
@@ -354,20 +380,36 @@
       return [parcela1, parcela2];
     }
 
+    function obterNumero(id, nome){
+      const valor = Number(document.getElementById(id).value);
+      if (!Number.isFinite(valor)) {
+        throw new Error(`O campo "${nome}" não possui um número válido.`);
+      }
+      return valor;
+    }
+
     function calcular() {
-      let creche_p = Number(document.getElementById("creche_p").value);
-      let creche_i = Number(document.getElementById("creche_i").value);
-      let pre_p    = Number(document.getElementById("pre_p").value);
-      let pre_i    = Number(document.getElementById("pre_i").value);
-      let fund_p   = Number(document.getElementById("fund_p").value);
-      let fund_i   = Number(document.getElementById("fund_i").value);
-      let eja      = Number(document.getElementById("eja").value);
-      let tecnico  = Number(document.getElementById("tecnico").value);
+      let creche_p, creche_i, pre_p, pre_i, fund_p, fund_i, eja, tecnico;
+      let perc_custeio, perc_capital, valor_parcial;
 
-      let perc_custeio = Number(document.getElementById("custeio").value);
-      let perc_capital = Number(document.getElementById("capital").value);
+      try {
+        creche_p = obterNumero("creche_p", "Creche – Parcial");
+        creche_i = obterNumero("creche_i", "Creche – Integral");
+        pre_p    = obterNumero("pre_p", "Pré-escola – Parcial");
+        pre_i    = obterNumero("pre_i", "Pré-escola – Integral");
+        fund_p   = obterNumero("fund_p", "Fundamental – Parcial");
+        fund_i   = obterNumero("fund_i", "Fundamental – Integral");
+        eja      = obterNumero("eja", "EJA");
+        tecnico  = obterNumero("tecnico", "Técnico");
 
-      let valor_parcial  = Number(document.getElementById("valor_parcial").value);
+        perc_custeio = obterNumero("custeio", "Custeio");
+        perc_capital = obterNumero("capital", "Capital");
+        valor_parcial  = obterNumero("valor_parcial", "Valor Parcial por aluno");
+      } catch (err){
+        mostrarResultados(`<b>Erro:</b> ${err.message}`);
+        return;
+      }
+
       let valor_integral = valor_parcial * 2; // sempre integral = parcial x 2
 
       const inputs = [creche_p, creche_i, pre_p, pre_i, fund_p, fund_i, eja, tecnico];
@@ -473,6 +515,7 @@
       document.getElementById("custeio").value = 80;
       document.getElementById("capital").value = 20;
       document.getElementById("valor_parcial").value = 125.03;
+      sincronizarCapital();
       atualizarValorIntegral(); // integral volta a ser 2x parcial padrão
 
       mostrarResultados("");

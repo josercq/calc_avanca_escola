@@ -7,114 +7,138 @@
     /* ===== Reset / alinhamento ===== */
     *, *::before, *::after { box-sizing: border-box; }
 
-    /* ===== Tema CLARO (institucional) ===== */
+    /* ===== Paleta neutra e moderna ===== */
     :root{
-      --bg: #f2f4f8;
+      --bg: #f7f8fb;
       --card: #ffffff;
-      --card-2: #e8f0ff;
-      --text: #111827;
+      --card-2: #eef1f8;
+      --text: #0f172a;
       --muted: #4b5563;
-      --border: #e5e7eb;
+      --border: #e2e8f0;
 
-      --input-bg: #f9fafb;
-      --input-border: #d1d5db;
+      --input-bg: #f8fafc;
+      --input-border: #d7deea;
 
-      --accent: #3b6fd8;        /* azul suave do botão */
-      --accent-hover: #2f5fc0;
-      --accent-soft: #e8f0ff;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --accent-soft: #e4ecff;
 
-      --shadow: 0 8px 22px rgba(17, 24, 39, .08);
-      --radius: 12px;
+      --shadow: 0 20px 60px rgba(15, 23, 42, .08);
+      --radius: 14px;
     }
 
     /* ===== Tema ESCURO ===== */
     body.dark{
-      --bg: #0f172a;
-      --card: #111827;
+      --bg: #0b1224;
+      --card: #0f172a;
       --card-2: #0b1220;
-      --text: #e5e7eb;
-      --muted: #9ca3af;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
       --border: #1f2937;
 
-      --input-bg: #0b1220;
-      --input-border: #263246;
+      --input-bg: #0e162c;
+      --input-border: #243045;
 
-      --accent: #22c1b0;        /* teal do dark anterior */
+      --accent: #22c1b0;
       --accent-hover: #1aa596;
-      --accent-soft: #0b1220;
+      --accent-soft: #123447;
 
-      --shadow: 0 12px 30px rgba(0,0,0,.45);
-      --radius: 14px;
+      --shadow: 0 20px 70px rgba(0,0,0,.45);
+      --radius: 16px;
     }
 
     body{
       margin:0;
-      background: var(--bg);
+      background: radial-gradient(circle at 10% 20%, #e8edff 0, transparent 25%),
+                  radial-gradient(circle at 90% 10%, #d9f2ff 0, transparent 24%),
+                  var(--bg);
       color: var(--text);
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       display:flex;
       justify-content:center;
       align-items:flex-start;
       min-height:100vh;
-      padding:36px 12px;
-      transition: background .25s ease, color .25s ease;
+      padding:48px 16px 64px;
+      transition: background .35s ease, color .25s ease;
     }
 
-    /* fundo dark anterior com gradiente leve */
     body.dark{
-      background: radial-gradient(1200px circle at 10% -10%, #1b2a54 0%, var(--bg) 45%, #0b1020 100%);
+      background: radial-gradient(1200px circle at 12% -6%, rgba(37,99,235,.08) 0%, transparent 50%),
+                  radial-gradient(1100px circle at 86% 12%, rgba(34,193,176,.12) 0%, transparent 48%),
+                  var(--bg);
     }
 
     .card{
-      width:440px;
+      width:520px;
       max-width:100%;
       background: var(--card);
       border:1px solid var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      padding:22px;
-      transition: background .25s ease, border-color .25s ease, box-shadow .25s ease;
+      padding:28px 28px 24px;
+      transition: background .25s ease, border-color .25s ease, box-shadow .25s ease, transform .25s ease;
     }
+    .card:hover{ transform: translateY(-2px); }
 
     /* Header com toggle */
     .header{
       display:flex;
-      align-items:center;
+      align-items:flex-start;
       justify-content:space-between;
       gap:10px;
-      margin-bottom:6px;
+      margin-bottom:14px;
+    }
+    .title-wrap{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+    .eyebrow{
+      text-transform:uppercase;
+      font-size:11px;
+      letter-spacing:0.12em;
+      color: var(--muted);
+      margin:0;
     }
     .header h2{
       margin:0;
-      font-size:20px;
+      font-size:22px;
       font-weight:700;
-      letter-spacing:.2px;
+      letter-spacing:.1px;
+    }
+    .subtitle{
+      margin:4px 0 0;
+      color: var(--muted);
+      font-size:13px;
+      line-height:1.5;
     }
 
     .theme-toggle{
       display:flex;
       align-items:center;
       gap:8px;
-      padding:6px 10px;
+      padding:10px 12px;
       border-radius:999px;
       border:1px solid var(--border);
-      background: transparent;
+      background: color-mix(in srgb, var(--accent) 7%, var(--card));
       color: var(--text);
       cursor:pointer;
       font-size:12px;
       font-weight:700;
-      transition: background .2s ease, border-color .2s ease, transform .04s ease;
+      transition: background .2s ease, border-color .2s ease, transform .08s ease, box-shadow .2s ease;
       user-select:none;
+      box-shadow: 0 10px 24px color-mix(in srgb, var(--accent) 12%, transparent);
     }
     .theme-toggle:hover{
-      background: color-mix(in srgb, var(--accent) 10%, transparent);
-      border-color: color-mix(in srgb, var(--accent) 50%, var(--border));
+      background: color-mix(in srgb, var(--accent) 14%, var(--card));
+      border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+      box-shadow: 0 12px 28px color-mix(in srgb, var(--accent) 16%, transparent);
     }
     .theme-toggle:active{ transform: translateY(1px); }
 
     .section-title{
-      margin:16px 0 8px;
-      padding-top:10px;
+      margin:18px 0 10px;
+      padding-top:14px;
       border-top:1px solid var(--border);
       font-size:12px;
       font-weight:700;
@@ -123,85 +147,111 @@
       letter-spacing:.6px;
     }
 
-    .input-group{ margin-bottom:12px; }
+    .section-grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap:12px 16px;
+    }
+
+    .input-group{
+      margin:0;
+      padding:12px;
+      border:1px solid var(--border);
+      border-radius:10px;
+      background: var(--card-2);
+      transition: border-color .18s ease, background .18s ease, transform .18s ease;
+    }
+    .input-group:focus-within{
+      border-color: color-mix(in srgb, var(--accent) 60%, var(--border));
+      background: color-mix(in srgb, var(--accent-soft) 55%, var(--card));
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px color-mix(in srgb, var(--accent) 12%, transparent);
+    }
 
     label{
       display:block;
-      margin-bottom:6px;
+      margin-bottom:8px;
       font-size:13px;
       color: var(--muted);
+      font-weight:600;
     }
 
     input{
       width:100%;
-      padding:9px 10px;
-      border-radius:8px;
+      padding:11px 12px;
+      border-radius:9px;
       border:1px solid var(--input-border);
       background: var(--input-bg);
       color: var(--text);
       outline:none;
-      transition:border-color .15s ease, box-shadow .15s ease, background .15s ease;
+      font-size:14px;
+      transition:border-color .15s ease, box-shadow .15s ease, background .15s ease, transform .08s ease;
     }
 
     input:focus{
       background: #fff;
       border-color: var(--accent);
       box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+      transform: translateY(-1px);
     }
     body.dark input:focus{
       background: var(--input-bg);
     }
+    input:focus-visible{ outline: 2px solid color-mix(in srgb, var(--accent) 60%, transparent); outline-offset: 2px; }
 
     /* ===== Botões ===== */
     .actions{
       display:flex;
       flex-direction:column;
-      gap:8px;
-      margin-top:6px;
+      gap:10px;
+      margin-top:10px;
     }
+
+    button{ font-family: inherit; }
 
     button.calc{
       width:100%;
       margin-top:0;
-      padding:12px;
+      padding:14px;
       border:none;
-      border-radius:8px;
-      background: var(--accent);
+      border-radius:10px;
+      background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent-hover) 80%, var(--accent)));
       color:#fff;
-      font-weight:bold;
+      font-weight:700;
       cursor:pointer;
-      transition: background .15s ease, transform .04s ease, box-shadow .2s ease;
-      box-shadow: 0 8px 18px color-mix(in srgb, var(--accent) 25%, transparent);
+      transition: background .15s ease, transform .08s ease, box-shadow .2s ease;
+      box-shadow: 0 10px 22px color-mix(in srgb, var(--accent) 32%, transparent);
       letter-spacing:.2px;
     }
-    button.calc:hover{ background: var(--accent-hover); }
+    button.calc:hover{ background: linear-gradient(135deg, var(--accent-hover), var(--accent)); }
     button.calc:active{ transform: translateY(1px); }
 
     button.secondary{
       width:100%;
-      padding:11px;
-      border-radius:8px;
+      padding:12px;
+      border-radius:10px;
       border:1px solid var(--border);
-      background: transparent;
+      background: var(--card);
       color: var(--text);
       font-weight:600;
       cursor:pointer;
-      transition: background .15s ease, transform .04s ease, border-color .15s ease;
+      transition: background .15s ease, transform .08s ease, border-color .15s ease, box-shadow .15s ease;
     }
     button.secondary:hover{
-      background: color-mix(in srgb, var(--accent) 8%, transparent);
-      border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+      background: color-mix(in srgb, var(--accent) 7%, var(--card));
+      border-color: color-mix(in srgb, var(--accent) 35%, var(--border));
+      box-shadow: 0 8px 18px color-mix(in srgb, var(--accent) 16%, transparent);
     }
     button.secondary:active{ transform: translateY(1px); }
 
     #resultados{
-      margin-top:16px;
-      padding:14px;
-      border-radius:10px;
+      margin-top:18px;
+      padding:16px;
+      border-radius:12px;
       background: var(--card-2);
       border:1px solid color-mix(in srgb, var(--border) 70%, transparent);
       font-size:14px;
-      line-height:1.55;
+      line-height:1.6;
 
       opacity:0;
       transform:translateY(10px);
@@ -223,75 +273,77 @@
 
   <div class="card">
     <div class="header">
-      <h2>Calculadora de Repasse</h2>
-      <button id="toggleTema" class="theme-toggle" type="button" onclick="toggleTema()">
+      <div class="title-wrap">
+        <p class="eyebrow">Avança Escola</p>
+        <h2>Calculadora de Repasse</h2>
+        <p class="subtitle">Preencha os campos para estimar rapidamente o valor de repasse por etapa e por parcela.</p>
+      </div>
+      <button id="toggleTema" class="theme-toggle" type="button" onclick="toggleTema()" aria-label="Alternar tema">
         🌙 Escuro
       </button>
     </div>
 
     <div class="section-title">Alunos por etapa e jornada</div>
-
-    <div class="input-group">
-      <label>Creche – Parcial</label>
-      <input id="creche_p" type="number" min="0" value="0">
-    </div>
-    <div class="input-group">
-      <label>Creche – Integral</label>
-      <input id="creche_i" type="number" min="0" value="0">
-    </div>
-
-    <div class="input-group">
-      <label>Pré-escola – Parcial</label>
-      <input id="pre_p" type="number" min="0" value="0">
-    </div>
-    <div class="input-group">
-      <label>Pré-escola – Integral</label>
-      <input id="pre_i" type="number" min="0" value="0">
-    </div>
-
-    <div class="input-group">
-      <label>Fundamental – Parcial</label>
-      <input id="fund_p" type="number" min="0" value="0">
-    </div>
-    <div class="input-group">
-      <label>Fundamental – Integral</label>
-      <input id="fund_i" type="number" min="0" value="0">
-    </div>
-
-    <div class="input-group">
-      <label>EJA (tratado como Parcial)</label>
-      <input id="eja" type="number" min="0" value="0">
-    </div>
-
-    <div class="input-group">
-      <label>Técnico (tratado como Parcial)</label>
-      <input id="tecnico" type="number" min="0" value="0">
+    <div class="section-grid" aria-label="Quantidade de alunos">
+      <div class="input-group">
+        <label for="creche_p">Creche – Parcial</label>
+        <input id="creche_p" type="number" min="0" value="0">
+      </div>
+      <div class="input-group">
+        <label for="creche_i">Creche – Integral</label>
+        <input id="creche_i" type="number" min="0" value="0">
+      </div>
+      <div class="input-group">
+        <label for="pre_p">Pré-escola – Parcial</label>
+        <input id="pre_p" type="number" min="0" value="0">
+      </div>
+      <div class="input-group">
+        <label for="pre_i">Pré-escola – Integral</label>
+        <input id="pre_i" type="number" min="0" value="0">
+      </div>
+      <div class="input-group">
+        <label for="fund_p">Fundamental – Parcial</label>
+        <input id="fund_p" type="number" min="0" value="0">
+      </div>
+      <div class="input-group">
+        <label for="fund_i">Fundamental – Integral</label>
+        <input id="fund_i" type="number" min="0" value="0">
+      </div>
+      <div class="input-group">
+        <label for="eja">EJA (tratado como Parcial)</label>
+        <input id="eja" type="number" min="0" value="0">
+      </div>
+      <div class="input-group">
+        <label for="tecnico">Técnico (tratado como Parcial)</label>
+        <input id="tecnico" type="number" min="0" value="0">
+      </div>
     </div>
 
     <div class="section-title">Destinação do recurso</div>
-
-    <div class="input-group">
-      <label>Custeio (%)</label>
-      <input id="custeio" type="number" min="0" max="100" value="80">
-    </div>
-
-    <div class="input-group">
-      <label>Capital (%)</label>
-      <input id="capital" type="number" min="0" max="100" value="20">
+    <div class="section-grid" aria-label="Destinação do recurso">
+      <div class="input-group">
+        <label for="custeio">Custeio (%)</label>
+        <input id="custeio" type="number" min="0" max="100" value="80">
+      </div>
+      <div class="input-group">
+        <label for="capital">Capital (%)</label>
+        <input id="capital" type="number" min="0" max="100" value="20">
+      </div>
     </div>
 
     <div class="section-title">Parâmetros</div>
+    <div class="section-grid" aria-label="Parâmetros">
+      <div class="input-group">
+        <label for="valor_parcial">Valor por aluno Parcial (R$)</label>
+        <input id="valor_parcial" type="number" step="0.01" min="0" value="125.03">
+        <div class="muted">Padrão: R$ 125,03</div>
+      </div>
 
-    <div class="input-group">
-      <label>Valor por aluno Parcial (R$)</label>
-      <input id="valor_parcial" type="number" step="0.01" min="0" value="125.03">
-      <div class="muted">Padrão: R$ 125,03</div>
-    </div>
-
-    <div class="input-group">
-      <label>Valor por aluno Integral (R$)</label>
-      <input id="valor_integral" type="number" step="0.01" min="0" value="250.06" readonly>
-      <div class="muted">Integral = Parcial x 2</div>
+      <div class="input-group">
+        <label for="valor_integral">Valor por aluno Integral (R$)</label>
+        <input id="valor_integral" type="number" step="0.01" min="0" value="250.06" readonly>
+        <div class="muted">Integral = Parcial x 2</div>
+      </div>
     </div>
 
     <div class="actions">
@@ -300,7 +352,7 @@
       <button class="secondary" type="button" onclick="imprimir()">Imprimir</button>
     </div>
 
-    <div id="resultados"></div>
+    <div id="resultados" aria-live="polite"></div>
   </div>
 
   <script>
